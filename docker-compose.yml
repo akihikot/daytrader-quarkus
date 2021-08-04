@@ -1,0 +1,86 @@
+
+
+version: '3'
+services:
+
+  daytrader-accounts:
+    build:
+      dockerfile: accounts/Dockerfile.native
+      context: .
+    image: daytrader-accounts
+    restart: always
+    environment:
+      - DAYTRADER_LOG_LEVEL=DEBUG
+      - DAYTRADER_LOG_APPENDER=ConsoleAppender
+
+  daytrader-portfolios:
+    build:
+      dockerfile: portfolios/Dockerfile.native
+      context: .
+    image: daytrader-portfolios
+    restart: always
+    environment:
+      - DAYTRADER_LOG_LEVEL=DEBUG
+      - DAYTRADER_LOG_APPENDER=ConsoleAppender
+
+  daytrader-quotes:
+    build:
+      dockerfile: quotes/Dockerfile.native
+      context: .
+    image: daytrader-quotes
+    restart: always
+    environment:
+      - DAYTRADER_LOG_LEVEL=DEBUG
+      - DAYTRADER_LOG_APPENDER=ConsoleAppender
+
+  daytrader-gateway:
+    build:
+      dockerfile: gateway/Dockerfile.native
+      context: .
+    image: daytrader-gateway
+    restart: always
+    environment:
+      - DAYTRADER_LOG_LEVEL=DEBUG
+      - DAYTRADER_LOG_APPENDER=ConsoleAppender
+      
+  daytrader-web:
+    build:
+      dockerfile: web/Dockerfile.web
+      context: .
+    image: daytrader-web
+    ports:
+      - 8080:8080
+    restart: always
+    environment:
+      - DAYTRADER_LOG_LEVEL=DEBUG
+      - DAYTRADER_LOG_APPENDER=ConsoleAppender
+
+  daytrader-accounts-db:
+    image: postgres:10.5
+    restart: always
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+    environment:
+      - POSTGRES_USER=daytrader
+      - POSTGRES_PASSWORD=daytrader
+      - POSTGRES_DB=accountsdb
+  
+  daytrader-portfolios-db:
+    image: postgres:10.5
+    restart: always
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+    environment:
+      - POSTGRES_USER=daytrader
+      - POSTGRES_PASSWORD=daytrader
+      - POSTGRES_DB=portfoliosdb
+
+  daytrader-quotes-db:
+    image: postgres:10.5
+    restart: always
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+    environment:
+      - POSTGRES_USER=daytrader
+      - POSTGRES_PASSWORD=daytrader
+      - POSTGRES_DB=quotesdb
