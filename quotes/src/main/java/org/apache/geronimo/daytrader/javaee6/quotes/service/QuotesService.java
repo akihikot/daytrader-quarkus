@@ -64,11 +64,9 @@ public class QuotesService {
 
     // - @Resource annotation is not supported on static fields
     @Inject
-    private static DataSource datasource;
+    private DataSource datasource;
 
     private static BigDecimal ZERO = new BigDecimal(0.0);
-
-    private static InitialContext context;
 
     /**
      * Zero arg constructor for QuotesService
@@ -700,13 +698,6 @@ public class QuotesService {
         if (initialized)
             return;
 
-        try {
-            context = new InitialContext();
-            // datasource = (DataSource) context.lookup(dsName);
-        } catch (Exception e) {
-//        	Log.error("QuotesService:init() - error on JNDI lookup of " + dsName + "-- QuotesService will not work",e);
-            return;
-        }
         TradeConfig.setPublishQuotePriceChange(false);
         initialized = true;
     }
